@@ -14,3 +14,10 @@ PlayFromYT()
 		mpv "$(youtube-dl --default-search 'ytsearch1:' \"$1\" --get-url | tail -1)"
 	fi
 }
+
+if [ $(dpkg-query -Wf='${Status}' mpv youtube-dl 2> /dev/null | grep -c "installed") -eq 0 ]
+then
+	install-dependencies
+else
+	PlayFromYT $1
+fi
