@@ -3,7 +3,7 @@ plays Youtube music from terminal using mpv.
 
 HOW TO USE:
 1) chmod +x Play.sh
-2) ./Play "[song name]" e.g. ./Play.sh "Rick Astely Never gonna give you up"
+2) ./Play "[song name]" e.g. ./Play.sh "21 savage immortal"
 
 HOW IT WORKS:
 1) Function install-dependencies() will install youtube-dl and mpv using apt
