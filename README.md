@@ -1,3 +1,5 @@
+#This only works on Debian based Linux distro's
+
 # YT-musicplayer
 plays Youtube music from terminal using mpv.
 
