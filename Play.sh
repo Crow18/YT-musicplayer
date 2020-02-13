@@ -20,6 +20,7 @@ PlayFromYT()
 if [ $(dpkg-query -Wf='${Status}' mpv youtube-dl 2> /dev/null | grep -c "installed") -eq 0 ]
 then
 	install-dependencies
+	PlayFromYT $1
 else
 	PlayFromYT $1
 fi
