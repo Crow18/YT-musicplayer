@@ -1,5 +1,7 @@
 #!/bin/bash
 
+song=$1
+
 install-dependencies()
 {
 	sudo apt install -y mpv wget
@@ -9,30 +11,34 @@ install-dependencies()
 
 SelectFromSearch()
 {
-	firtsarg=$1
-	selection="youtube-dl --get-title --default-search ytsearch10:" 
-	eval "$selection $1" | awk '{printf "%d %s\n", NR, $0}'
-	echo which track would you like to hear?
-	read num
-}
-
-
-PlayFromYT()
-{
-	if [[ -z "$1" ]]
+	if [[ -z "$song" ]]
 	then
 	       	echo "Enter a song to search as first arg"
        	else
-		mpv "$(youtube-dl --default-search 'ytsearch:' \"$1\" --get-url | tail -1)"
+		echo "Searching please wait..."
+		selection="youtube-dl --newline --get-title --default-search ytsearch10: $song"
+		eval "$selection" | awk '{printf "%d %s\n", NR, $0}' | tee .YTStreamList
+		if [ -s ".YTStreamList" ]
+		then
+			echo which track would you like to hear?
+			read num
+			echo "Loading..."
+			newselect="sed -n "$num"p .YTStreamList"
+			eval $newselect | cut -d " " -f 2- | tee .YTSelect | tr -s " " | tr -dc '[:alnum:]\n '
+			play=$(cat ".YTSelect")
+			mpv "$(youtube-dl -a .YTSelect --default-search ytsearch --get-url | tail -1)"
+			#rm -rf .YTStreamList
+		else
+			echo "something went wrong! check your connection"
+		fi
 	fi
 }
+
 
 if [ $(dpkg-query -Wf='${Status}' mpv youtube-dl 2> /dev/null | grep -c "installed") -eq 0 ]
 then
 	install-dependencies
-#	PlayFromYT $1
-
+	SelectFromSearch $1
 else
-#	PlayFromYT $1
-	SelectFromSearch
+	SelectFromSearch $1
 fi
