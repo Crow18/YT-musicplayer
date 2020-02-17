@@ -2,6 +2,8 @@
 
 song=$1
 bool=0
+Bool=0
+re='^[0-9]+$'
 
 install-dependencies()
 {
@@ -15,7 +17,7 @@ SelectFromSearch()
 {
 	if [[ -z "$song" ]]
 	then
-	       	echo "Enter a song to search as first arg"
+	       	echo "Enter a song to search as first arg: ./Play.sh <song name>"
        	else
 		echo "Searching please wait..."
 		selection="youtube-dl --newline --get-title --default-search ytsearch5: $song"
@@ -24,13 +26,17 @@ SelectFromSearch()
 		then
 			echo which track would you like to hear?
 			read num
-			echo "Loading..."
-			newselect="sed -n "$num"p .YTStreamList"
-			eval $newselect | cut -d " " -f 2- | tee .YTSelect | tr -s " " | tr -dc '[:alnum:]\n '
-			play=$(cat ".YTSelect")
-			mpv "$(youtube-dl -a .YTSelect --default-search ytsearch --get-url | tail -1)"
-			rm -rf .YTStreamList
-			rm -rf .YTSelect
+			
+			#if [[ $1 =~ $re ]]
+			#then
+				echo "Loading..."
+				newselect="sed -n "$num"p .YTStreamList"
+				eval $newselect | cut -d " " -f 2- | tee .YTSelect | tr -s " " | tr -dc '[:alnum:]\n '
+			#play=$(cat ".YTSelect")
+				mpv "$(youtube-dl -a .YTSelect --default-search ytsearch --audio-format mp3 --get-url | tail -1)"
+				rm -rf .YTStreamList
+				rm -rf .YTSelect
+			
 		else
 			echo "Oops! something went wrong... try checking your internet connection"
 		fi
