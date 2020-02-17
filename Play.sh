@@ -37,7 +37,7 @@ SelectFromSearch()
 }
 
 
-if [ $(ls /usr/local/bin | grep -c "youtube-dl") -eq 0 ]
+if [ $(sudo ls /usr/local/bin | grep -c "youtube-dl") -eq 0 ]
 then
 	let "bool++"
 elif [ $(dpkg-query -Wf='${Status}' mpv  2> /dev/null | grep -c "installed") -eq 0 ]
