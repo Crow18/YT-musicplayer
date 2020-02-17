@@ -1,10 +1,12 @@
 #!/bin/bash
 
 song=$1
+bool=0
 
 install-dependencies()
 {
 	sudo apt install -y mpv wget
+	sudo apt remove -y youtube-dl 2> /dev/null
 	sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
 	sudo chmod a+rx /usr/local/bin/youtube-dl
 }
@@ -29,13 +31,21 @@ SelectFromSearch()
 			mpv "$(youtube-dl -a .YTSelect --default-search ytsearch --get-url | tail -1)"
 			#rm -rf .YTStreamList
 		else
-			echo "something went wrong! check your connection"
+			echo "something went wrong! check your internet connection"
 		fi
 	fi
 }
 
 
-if [ $(dpkg-query -Wf='${Status}' mpv youtube-dl 2> /dev/null | grep -c "installed") -eq 0 ]
+if [ $(ls /usr/local/bin | grep -c "youtube-dl") -eq 0 ]
+then
+	let "bool++"
+elif [ $(dpkg-query -Wf='${Status}' mpv  2> /dev/null | grep -c "installed") -eq 0 ]
+then
+	let "bool++"
+fi
+
+if [ $bool -gt 0 ]
 then
 	install-dependencies
 	SelectFromSearch $1
