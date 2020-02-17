@@ -18,7 +18,7 @@ SelectFromSearch()
 	       	echo "Enter a song to search as first arg"
        	else
 		echo "Searching please wait..."
-		selection="youtube-dl --newline --get-title --default-search ytsearch10: $song"
+		selection="youtube-dl --newline --get-title --default-search ytsearch5: $song"
 		eval "$selection" | awk '{printf "%d %s\n", NR, $0}' | tee .YTStreamList
 		if [ -s ".YTStreamList" ]
 		then
@@ -29,7 +29,8 @@ SelectFromSearch()
 			eval $newselect | cut -d " " -f 2- | tee .YTSelect | tr -s " " | tr -dc '[:alnum:]\n '
 			play=$(cat ".YTSelect")
 			mpv "$(youtube-dl -a .YTSelect --default-search ytsearch --get-url | tail -1)"
-			#rm -rf .YTStreamList
+			rm -rf .YTStreamList
+			rm -rf .YTSelect
 		else
 			echo "something went wrong! check your internet connection"
 		fi
