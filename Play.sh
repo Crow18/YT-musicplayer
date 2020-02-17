@@ -32,7 +32,7 @@ SelectFromSearch()
 			rm -rf .YTStreamList
 			rm -rf .YTSelect
 		else
-			echo "something went wrong! check your internet connection"
+			echo "Oops! something went wrong... try checking your internet connection"
 		fi
 	fi
 }
